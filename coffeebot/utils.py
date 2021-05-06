@@ -16,7 +16,7 @@ def get_channel(driver, team_name, channel_name):
     return response
 
 
-def get_channel_members(driver, team_name, channel_name):
+def get_channel_members(driver, team_name, channel_name, ignore_ids=None):
     """
     Retrieve all of the members from a channel given a team and channel name.
     Returns a list of user IDs sorted alphabetically.
@@ -39,7 +39,10 @@ def get_channel_members(driver, team_name, channel_name):
     # count the bot as a user in pairings)
     members = [
         member['user_id'] for member in response if (
-            member['user_id'] != bot_id)]
+            member['user_id'] != bot_id and
+            (ignore_ids is None or member['user_id'] not in ignore_ids)
+        )
+    ]
 
     # Sort the member list alphabetically so that when we create pairs in the
     # database using the list, we won't create duplicate pairs (A <-> B is the
@@ -160,7 +163,7 @@ def get_pair(session, members):
     members.remove(member)
     members.remove(paired_member)
 
-    return (member, paired_member)
+    return member, paired_member
 
 
 def get_pairs(session, members):

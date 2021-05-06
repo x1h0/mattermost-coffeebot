@@ -3,6 +3,7 @@ from coffeebot.models import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+
 def init_session():
     database_uri = config.DATABASE_URI
     engine = create_engine(database_uri)

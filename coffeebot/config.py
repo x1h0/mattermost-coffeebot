@@ -16,9 +16,12 @@ PORT = int(os.getenv('COFFEEBOT_MATTERMOST_PORT'))
 
 USERNAME = os.getenv('COFFEEBOT_MATTERMOST_USERNAME')
 PASSWORD = os.getenv('COFFEEBOT_MATTERMOST_PASSWORD')
+TOKEN = os.getenv('COFFEEBOT_MATTERMOST_TOKEN')
 
 TEAM_NAME = os.getenv('COFFEEBOT_MATTERMOST_TEAM')
 CHANNEL_NAME = os.getenv('COFFEEBOT_MATTERMOST_CHANNEL')
+
+IGNORED_USER_IDS = str(os.getenv('COFFEEBOT_MATTERMOST_IGNORE_USER_IDS')).split(',')
 
 MESSAGE = """
 You have been matched to meet up! Please respond with your availabilities :)

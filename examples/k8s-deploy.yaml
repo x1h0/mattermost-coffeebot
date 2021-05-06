@@ -5,6 +5,7 @@ metadata:
   labels:
     app: mattermost-coffeebot
   name: mattermost-coffeebot
+
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -39,6 +40,7 @@ spec:
   # run every 2nd Monday at 10am (server time)
   schedule: 0 10 */2 * 1
   startingDeadlineSeconds: 1800
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -54,6 +56,7 @@ data:
   COFFEEBOT_MATTERMOST_TEAM: mattermost-coffeebot
   COFFEEBOT_MATTERMOST_URL: my.mattermost.com
   COFFEEBOT_MATTERMOST_USERNAME: mattermost-coffeebot
+
 ---
 apiVersion: v1
 kind: Secret

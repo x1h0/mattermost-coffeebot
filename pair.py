@@ -1,4 +1,4 @@
-from mattermostdriver import Driver
+import mattermostdriver
 from coffeebot.logger import logger
 from coffeebot import config, database, utils
 
@@ -9,9 +9,10 @@ def create_driver():
         'url': config.URL,
         'login_id': config.USERNAME,
         'password': config.PASSWORD,
-        'port': config.PORT
+        'port': config.PORT,
+        'token': config.TOKEN
     }
-    return Driver(driver_options)
+    return mattermostdriver.Driver(driver_options)
 
 
 def authenticate(driver):
@@ -24,8 +25,13 @@ def authenticate(driver):
 def get_members(driver):
     logger.info("Retrieving Coffee Buddies participants...")
     members = utils.get_channel_members(
-        driver, config.TEAM_NAME, config.CHANNEL_NAME)
-    logger.info("Successfully retrieved Coffee Buddies participants.")
+        driver,
+        config.TEAM_NAME,
+        config.CHANNEL_NAME,
+        config.IGNORED_USER_IDS
+    )
+
+    logger.info("Successfully retrieved Coffee Buddies participants: %d", len(members))
     return members
 
 
@@ -33,7 +39,7 @@ def prepare_db(session, members):
     logger.info("Preparing participants database...")
     utils.create_users(session, members)
     utils.create_pairs(session, members)
-    logger.info("Succesfully prepared participants database.")
+    logger.info("Successfully prepared participants database.")
 
 
 def pair(session, driver, members):
@@ -51,9 +57,14 @@ def main():
     driver = create_driver()
     authenticate(driver)
     members = get_members(driver)
+    if len(members) < 2:
+        logger.debug("No members found to pair. Exiting.")
+        return
+
     logger.debug(members)
     prepare_db(session, members)
     pair(session, driver, members)
+
 
 if __name__ == '__main__':
     main()
